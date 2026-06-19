@@ -1,3 +1,7 @@
 *.dmg
 *.zip
 *.sha256
+
+# Local documentation change history
+.document-changelog/
+DOCUMENT_CHANGELOG.local.md

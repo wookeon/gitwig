@@ -4,14 +4,35 @@
 
 ## 한국어
 
-이 문서는 Gitwig 배포와 관련해 사용된 주요 오픈소스 구성요소를 기록합니다. Gitwig 자체는 비오픈소스 무료 배포 소프트웨어이며, 아래 구성요소는 각 프로젝트의 라이선스를 따릅니다.
+이 문서는 Gitwig 배포와 관련해 사용된 주요 오픈소스 구성요소를 기록합니다. Gitwig 자체는 비오픈소스 무료 배포 소프트웨어이며, 아래 구성요소는 각 프로젝트의 라이선스를 따릅니다. Gitwig 라이선스는 각 오픈소스 구성요소의 원 라이선스가 허용하는 권리를 제한하지 않습니다.
 
-목록은 `Cargo.lock`과 다음 명령을 기준으로 작성했습니다.
+목록은 `Cargo.lock`, SwiftPM `Package.resolved`, 번들 리소스 라이선스 파일과 다음 명령을 기준으로 작성했습니다.
 
 - Runtime: `cargo tree -p git-ffi --edges normal,no-proc-macro`
 - Build-time only: `cargo tree -p gitwig-uniffi-bindgen --edges normal`
+- Swift packages: `Gitwig.xcworkspace/xcshareddata/swiftpm/Package.resolved`
+- Bundled resources: `macos/Gitwig/Resources/Fonts/D2Coding/D2Coding-LICENSE.txt`
 
 Apple SDK(`SwiftUI`, `AppKit`, `Security` 등)는 이 목록에 포함하지 않습니다. 이 파일은 오픈소스 구성요소 인벤토리이며, 릴리스 패키지에는 필요 시 각 라이선스 전문 또는 자동 생성된 고지 번들을 함께 포함해야 합니다.
+
+### 배포 전 라이선스 검토 결과
+
+2026-06-19 기준 `Cargo.lock`, SwiftPM `Package.resolved`, 번들 리소스 라이선스를 다시 확인했습니다. Gitwig의 현재 독점 무료 배포 라이선스와 직접 충돌하는 GPL-only, AGPL, LGPL-only, SSPL, BUSL 계열 의존성은 확인되지 않았습니다.
+
+- Rust 쪽 `uniffi` 계열은 MPL-2.0입니다. MPL-2.0은 파일 단위 copyleft이므로 Gitwig 전체를 오픈소스로 전환해야 하는 성격은 아니지만, MPL 적용 파일을 수정해 배포하는 경우 해당 수정 파일의 MPL 의무를 지켜야 합니다.
+- Rust 쪽 `r-efi`는 `MIT OR Apache-2.0 OR LGPL-2.1-or-later` 형태입니다. Gitwig 배포에서는 MIT 또는 Apache-2.0 조건을 선택할 수 있어 LGPL 충돌로 보지 않습니다.
+- SwiftPM/Firebase 계열은 Apache-2.0, MIT, BSD-3-Clause, Zlib 계열입니다. 현재 라이선스 충돌은 보이지 않지만, 최종 릴리스 패키지는 Apache-2.0, MIT, BSD-3-Clause, Zlib, SIL OFL 1.1, MPL-2.0 고지를 포함해야 합니다.
+
+### 릴리스 고지 포함 범위
+
+| License family | Representative components | Required handling |
+| --- | --- | --- |
+| Apache-2.0 | Firebase/Google Swift packages, many Rust crates | Include the Apache-2.0 license text and any upstream NOTICE text that applies to distributed binaries. |
+| MIT | `SwiftTerm`, many Rust crates | Preserve copyright and permission notices. |
+| BSD-3-Clause | `leveldb` | Preserve copyright, conditions, disclaimer, and non-endorsement clause. |
+| Zlib | `nanopb`, `zlib-rs`, `foldhash` | Preserve the license notice; mark altered source versions if redistributed. |
+| SIL OFL 1.1 | `D2Coding` | Keep the font license with the bundled font and do not sell the font by itself. |
+| MPL-2.0 | `uniffi` crates | Preserve MPL notices and provide source for any modified MPL-covered files that are distributed. |
 
 ### 직접 의존성
 
@@ -20,6 +41,9 @@ Apple SDK(`SwiftUI`, `AppKit`, `Security` 등)는 이 목록에 포함하지 않
 | `gix` | `0.83.0` | `MIT OR Apache-2.0` | Git repository engine used by Gitwig's Rust core |
 | `thiserror` | `2.0.18` | `MIT OR Apache-2.0` | Error type support in Rust crates |
 | `uniffi` | `0.31.1` | `MPL-2.0` | Rust-to-Swift FFI binding support |
+| `firebase-ios-sdk` | `12.15.0` | `Apache-2.0` | Firebase Core, Analytics, Crashlytics, and Remote Config support |
+| `SwiftTerm` | `1.13.0` | `MIT` | Terminal view support |
+| `D2Coding` | `1.3.2` | `SIL Open Font License 1.1` | Bundled terminal font |
 
 ### Runtime Dependency Inventory
 
@@ -152,6 +176,64 @@ These registry packages are in the `git-ffi` dependency graph with normal runtim
 | `zlib-rs` | `0.6.3` | `Zlib` |
 | `zmij` | `1.0.21` | `MIT` |
 
+### Swift Package Dependency Inventory
+
+These packages are resolved by SwiftPM for Firebase and terminal support.
+
+| Component | Version | License |
+| --- | --- | --- |
+| `abseil-cpp-binary` | `1.2024072200.0` | `Apache-2.0` |
+| `app-check` | `11.3.0` | `Apache-2.0` |
+| `firebase-ios-sdk` | `12.15.0` | `Apache-2.0` |
+| `google-ads-on-device-conversion-ios-sdk` | `3.6.0` | `Apache-2.0` |
+| `GoogleAppMeasurement` | `12.15.0` | `Apache-2.0` |
+| `GoogleDataTransport` | `10.1.0` | `Apache-2.0` |
+| `GoogleUtilities` | `8.1.1` | `Apache-2.0` |
+| `grpc-binary` | `1.69.1` | `Apache-2.0` |
+| `gtm-session-fetcher` | `5.3.0` | `Apache-2.0` |
+| `interop-ios-for-google-sdks` | `101.0.0` | `Apache-2.0` |
+| `leveldb` | `1.22.5` | `BSD-3-Clause` |
+| `nanopb` | `2.30910.1` | `Zlib` |
+| `promises` | `2.4.1` | `Apache-2.0` |
+| `SwiftTerm` | `1.13.0` | `MIT` |
+| `swift-argument-parser` | `1.8.2` | `Apache-2.0 WITH Runtime Library Exception` |
+
+### SwiftTerm License Notice
+
+`SwiftTerm` is included under the MIT License. The following notice is from the upstream SwiftTerm license file:
+
+```text
+Copyright (c) 2019-2022 Miguel de Icaza (https://github.com/migueldeicaza)
+Copyright (c) 2017-2019, The xterm.js authors (https://github.com/xtermjs/xterm.js)
+Copyright (c) 2014-2016, SourceLair Private Company (https://www.sourcelair.com)
+Copyright (c) 2012-2013, Christopher Jeffrey (https://github.com/chjj/)
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+```
+
+### Bundled Resource Inventory
+
+| Component | Version | License | Usage |
+| --- | --- | --- | --- |
+| `D2Coding` | `1.3.2` | `SIL Open Font License 1.1` | Bundled terminal font |
+
 ### Build-Time Only Dependency Inventory
 
 These packages are used by the binding generator or compile-time tooling and are not intended to be bundled as runtime app components.
@@ -203,6 +285,8 @@ These packages are used by the binding generator or compile-time tooling and are
 
 ## English
 
-This document records the main open source components used by Gitwig distribution. Gitwig itself is proprietary freeware; the components listed above remain governed by their own project licenses.
+This document records the main open source components used by Gitwig distribution. Gitwig itself is proprietary freeware; the components listed above remain governed by their own project licenses. The Gitwig license does not limit rights granted by the original licenses of these open source components.
 
-The inventory is generated from `Cargo.lock` using the runtime and build-time commands listed in the Korean section. Apple SDK components such as `SwiftUI`, `AppKit`, and `Security` are not included. This file is an open source component inventory; release packages should include complete license texts or generated notice bundles when required by the applicable licenses.
+The inventory is generated from `Cargo.lock`, SwiftPM `Package.resolved`, bundled resource license files, and the commands listed in the Korean section. Apple SDK components such as `SwiftUI`, `AppKit`, and `Security` are not included. This file is an open source component inventory; release packages should include complete license texts or generated notice bundles when required by the applicable licenses.
+
+As of 2026-06-19, no GPL-only, AGPL, LGPL-only, SSPL, or BUSL dependency was found in the checked dependency set. The `uniffi` crates are MPL-2.0 and should be handled as file-level copyleft components. `r-efi` is licensed as `MIT OR Apache-2.0 OR LGPL-2.1-or-later`; Gitwig can use the permissive MIT or Apache-2.0 option.

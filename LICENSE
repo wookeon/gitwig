@@ -32,10 +32,12 @@ law, the copyright holder is not liable for any claim, damages, data loss,
 business interruption, or other liability arising from the use of or inability
 to use Gitwig.
 
-Third-party components included with Gitwig remain subject to their own
-licenses. Required third-party notices are provided in `THIRD_PARTY_NOTICES.md`
-or in release assets, inside the application bundle, or in accompanying
-documentation when applicable.
+The restrictions above apply to Gitwig's proprietary materials and official
+release packages as distributed. Third-party components included with Gitwig
+remain subject to their own licenses, and nothing in this license limits rights
+you may have under those third-party licenses. Required third-party notices are
+provided in `THIRD_PARTY_NOTICES.md` or in release assets, inside the
+application bundle, or in accompanying documentation when applicable.
 
 Permission terminates automatically if you violate this license. Upon
 termination, you must stop using Gitwig and delete all copies in your
